@@ -37,3 +37,7 @@
     - NIST-800-53-CM-7
     - NIST-800-53-CM-6(b)
     - DISA-STIG-RHEL-07-021300
+
+- name: Import SSH Server Tasks
+  import_tasks: services_ssh_server.yml
+  when: centos7_cui_compliance_services_ssh_server_tasks

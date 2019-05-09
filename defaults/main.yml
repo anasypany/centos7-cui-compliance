@@ -33,4 +33,12 @@ services_sssd_memcache_timeout: '300'
 services_sssd_ssh_known_hosts_timeout: '180'
 services_sssd_offline_credentials_expiration: '1'
 
+# Services SSH Server Variables
+centos7_cui_compliance_services_ssh_server_tasks: true
+services_ssh_server_sshd_set_keepalive: '0'
+services_ssh_server_sshd_idle_timeout_value: '600'
+services_ssh_server_sshd_approved_macs: 'hmac-sha2-512,hmac-sha2-256,hmac-sha1,hmac-sha1-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com'
+services_ssh_server_sshd_approved_ciphers: 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
+
+
 centos7_cui_compliance_system_settings_tasks: true

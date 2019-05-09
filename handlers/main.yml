@@ -1,2 +1,8 @@
 ---
 # handlers file for centos7-cui-compliance
+
+- name: Restart the sshd Service
+  service:
+    name: sshd
+    state: restarted
+  listen: restart sshd

@@ -11,7 +11,9 @@
     path: /etc/cron.allow
     group: root
     owner: root
-  when: file_exists.stat.exists
+  when:
+    - cron_allow_file_exists.exists is defined
+    - cron_allow_file_exists.exists
   tags:
     - CCE-80379-1
     - CCE-80378-3
