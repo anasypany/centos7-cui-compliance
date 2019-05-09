@@ -1,1 +1,13 @@
 ---
+
+- name: Import Installing and Maintaining Software Tasks
+  import_tasks: system_settings_installing_and_maintaining_software.yml
+  when: centos7_cui_compliance_system_settings_installing_and_maintaining_software_tasks
+
+- name: Import Configure Syslog Tasks
+  import_tasks: system_settings_configure_syslog.yml
+  when: centos7_cui_compliance_system_settings_configure_syslog_tasks
+
+- name: Import Network Configuration and Firewalls Tasks
+  import_tasks: system_settings_network_configuration_and_firewalls.yml
+  when: centos7_cui_compliance_system_settings_network_configuration_and_firewalls_tasks

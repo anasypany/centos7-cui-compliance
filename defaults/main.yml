@@ -43,9 +43,27 @@ services_sssd_offline_credentials_expiration: '1'
 # Services - Base Services Variables
 centos7_cui_compliance_services_base_services_tasks: true
 
-# Services SSH Server Variables
+# Services - SSH Server Variables
 centos7_cui_compliance_services_ssh_server_tasks: true
 services_ssh_server_sshd_set_keepalive: '0'
 services_ssh_server_sshd_idle_timeout_value: '600'
 services_ssh_server_sshd_approved_macs: 'hmac-sha2-512,hmac-sha2-256,hmac-sha1,hmac-sha1-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com'
 services_ssh_server_sshd_approved_ciphers: 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
+
+# System Settings - Installing and Maintaining Software Variables
+centos7_cui_compliance_system_settings_installing_and_maintaining_software_tasks: true
+
+# System Settings - Configure Syslog Variables
+centos7_cui_compliance_system_settings_configure_syslog_tasks: true
+
+# System Settings - Network Configuration and Firewalls Variables
+centos7_cui_compliance_system_settings_network_configuration_and_firewalls_tasks: true
+system_settings_network_configuration_and_firewalls_disable_ipv6_autoconf: true
+system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_source_route_value: '0'
+system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_source_route_value: '0'
+system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_forwarding_value: '0'
+system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_redirects_value: '0'
+system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_redirects_value: '0'
+system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_ra_value: '0'
+system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_ra_value: '0'
+system_settings_network_configuration_and_firewalls_ipv6_privacy: false

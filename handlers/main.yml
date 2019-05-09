@@ -6,3 +6,9 @@
     name: sshd
     state: restarted
   listen: restart sshd
+
+- name: Restart the firewalld Service
+  service:
+    name: firewalld
+    state: restarted
+  listen: restart firewalld

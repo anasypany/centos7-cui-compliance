@@ -1,0 +1,126 @@
+---
+
+- name: Disable Automatic IPv6 Configuration
+  lineinfile:
+    path: "/etc/sysconfig/network-scripts/ifcfg-{{ item }}"
+    regexp: '(?i)^#?IPV6_AUTOCONF'
+    line: "IPV6_AUTOCONF=no"
+  loop: "{{ ansible_interfaces }}"
+  when: system_settings_network_configuration_and_firewalls_disable_ipv6_autoconf
+
+- name: Configure Kernel Parameter for Accepting IPv6 Source-Routed Packets on All Interface
+  sysctl:
+    name: net.ipv6.conf.all.accept_source_route
+    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_source_route_value }}"
+    state: present
+    reload: yes
+  tags:
+    - CCE-80179-5
+    - NIST-800-53-AC-4
+    - NIST-800-171-3.1.20
+    - DISA-STIG-RHEL-07-040830
+
+- name: Configure Kernel Parameter for Accepting IPv6 Source-Routed Packets by Default
+  sysctl:
+    name: net.ipv6.conf.default.accept_source_route
+    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_source_route_value }}"
+    state: present
+    reload: yes
+  tags:
+    - CCE-80335-1
+    - NIST-800-53-AC-4
+    - NIST-800-171-3.1.20
+
+- name: Configure Kernel Parameter for IPv6 Forwarding (Default is Disabled)
+  sysctl:
+    name: net.ipv6.conf.all.forwarding
+    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_forwarding_value }}"
+    state: present
+    reload: yes
+  tags:
+    - CCE-80356-9
+    - NIST-800-53-CM-7
+    - NIST-800-53-SC-5
+
+- name: Configure Kernel Parameter for Accepting IPv6 Redirects on All Interfaces
+  sysctl:
+    name: net.ipv6.conf.all.accept_redirects
+    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_redirects_value }}"
+    state: present
+    reload: yes
+  tags:
+    - CCE-80182-9
+    - NIST-800-53-CM-7
+    - NIST-800-171-3.1.20
+
+- name: Configure Kernel Parameter for Accepting IPv6 Redirects by Default
+  sysctl:
+    name: net.ipv6.conf.default.accept_redirects
+    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_redirects_value }}"
+    state: present
+    reload: yes
+  tags:
+    - CCE-80183-7
+    - NIST-800-53-CM-7
+    - NIST-800-171-3.1.20
+
+- name: Configure Kernel Parameter for Accepting IPv6 Router Advertisements on All Interfaces
+  sysctl:
+    name: net.ipv6.conf.all.accept_ra
+    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_ra_value }}"
+    state: present
+    reload: yes
+  tags:
+    - CCE-80180-3
+    - NIST-800-53-CM-7
+    - NIST-800-171-3.1.20
+
+- name: Configure Kernel Parameter for Accepting IPv6 Router Advertisements by Default
+  sysctl:
+    name: net.ipv6.conf.default.accept_ra
+    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_ra_value }}"
+    state: present
+    reload: yes
+  tags:
+    - CCE-80181-1
+    - NIST-800-53-CM-7
+    - NIST-800-171-3.1.20
+
+- name: Use Privacy Extensions for Automatic Generation of IPv6 Addresses
+  lineinfile:
+    path: "/etc/sysconfig/network-scripts/ifcfg-{{ item }}"
+    regexp: '(?i)^#?IPV6_PRIVACY'
+    line: "IPV6_PRIVACY=rfc3041"
+  loop: "{{ ansible_interfaces }}"
+  when: system_settings_network_configuration_and_firewalls_ipv6_privacy
+  tags:
+    - CCE-80185-2
+    - NIST-800-53-CM-7
+    - NIST-800-171-3.1.20
+
+- name: Enable SSHD in firewalld (default port)
+  firewalld:
+    immediate: yes
+    permanent: yes
+    service: ssh
+    state: enabled
+    zone: drop
+  tags:
+    - CCE-80361-9
+    - NIST-800-53-AC-17(a)
+    - NIST-800-171-3.1.12
+
+- name: Set Default firewalld Zone for Incoming Packets
+  lineinfile:
+    path: "/etc/firewalld/firewalld.conf"
+    regexp: '^DefaultZone'
+    line: "DefaultZone=drop"
+  notify: restart firewalld
+  tags:
+  - CCE-27349-0
+  - NIST-800-53-CM-6(b)
+  - NIST-800-53-CM-7
+  - NIST-800-171-3.1.3
+  - NIST-800-171-3.4.7
+  - NIST-800-171-3.13.6
+  - DISA-STIG-RHEL-07-040810
