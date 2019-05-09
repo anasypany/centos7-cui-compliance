@@ -1,9 +1,13 @@
 ---
 # defaults file for centos7-cui-compliance
 
+# Enable Services Tasks
 centos7_cui_compliance_services_tasks: true
 
-# Services - Obsolete Services Variables
+# Enable System Settings Tasks
+centos7_cui_compliance_system_settings_tasks: true
+
+# Services - Obsolete Services Task Variables
 centos7_cui_compliance_services_obsolete_services_tasks: true
 services_obsolete_services_uninstall_packages:
   - 'rsh'
@@ -24,14 +28,20 @@ services_obsolete_services_disable_services:
   - 'ypbind'
   - 'xinetd'
 
-# Services - Cron and At Daemons Variables
+# Services - Cron and At Daemons Task Variables
 centos7_cui_compliance_services_cron_and_at_daemons_tasks: true
 
-# Services - SSSD Variables
+# Services - Network Routing Task Variables
+centos7_cui_compliance_services_network_routing_tasks: true
+
+# Services - SSSD Task Variables
 centos7_cui_compliance_services_sssd_tasks: true
 services_sssd_memcache_timeout: '300'
 services_sssd_ssh_known_hosts_timeout: '180'
 services_sssd_offline_credentials_expiration: '1'
+
+# Services - Base Services Variables
+centos7_cui_compliance_services_base_services_tasks: true
 
 # Services SSH Server Variables
 centos7_cui_compliance_services_ssh_server_tasks: true
@@ -39,6 +49,3 @@ services_ssh_server_sshd_set_keepalive: '0'
 services_ssh_server_sshd_idle_timeout_value: '600'
 services_ssh_server_sshd_approved_macs: 'hmac-sha2-512,hmac-sha2-256,hmac-sha1,hmac-sha1-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com'
 services_ssh_server_sshd_approved_ciphers: 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
-
-
-centos7_cui_compliance_system_settings_tasks: true

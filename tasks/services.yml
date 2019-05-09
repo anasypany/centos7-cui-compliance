@@ -16,7 +16,9 @@
     name: zebra
     state: stopped
     enabled: no
-  when: "'zebra' in ansible_facts.services"
+  when:
+    - "'zebra' in ansible_facts.services"
+    - centos7_cui_compliance_services_network_routing_tasks
   tags:
     - CCE-27191-6
     - NIST-800-53-SC-32
@@ -30,7 +32,9 @@
     name: kdump
     state: stopped
     enabled: no
-  when: "'kdump' in ansible_facts.services"
+  when:
+    - "'kdump' in ansible_facts.services"
+    - centos7_cui_compliance_services_base_services_tasks
   tags:
     - CCE-80258-7
     - NIST-800-53-AC-17(8)
