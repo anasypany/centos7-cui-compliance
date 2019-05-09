@@ -1,0 +1,75 @@
+---
+
+- name: "Uninstall Obsolete Packages"
+  package:
+    name: "{{ services_obsolete_services_uninstall_packages }}"
+    state: absent
+  tags:
+    - CCE-27274-0
+    - CCE-27342-5
+    - CCE-27305-2
+    - CCE-27165-0
+    - CCE-27396-1
+    - CCE-27399-5
+    - CCE-27354-0
+    - CCE-27432-4
+    - CCE-27210-4
+    - NIST-800-53-AC-17(8)
+    - NIST-800-53-CM-7(a)
+    - NIST-800-171-3.1.13
+    - DISA-STIG-RHEL-07-020000
+    - DISA-STIG-RHEL-07-021710
+    - DISA-STIG-RHEL-07-020010
+
+- name: "Disable Obsolete Services"
+  service:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  when: "item in ansible_facts.services"
+  loop: "{{ services_obsolete_services_disable_services }}"
+  tags:
+    - CCE-27336-7
+    - CCE-27337-5
+    - CCE-27408-4
+    - CCE-27401-9
+    - CCE-27385-4
+    - CCE-27443-1
+    - NIST-800-53-AC-17(8)
+    - NIST-800-53-CM-7
+    - NIST-800-53-IA-5(1)(c)
+    - NIST-800-171-3.1.13
+    - NIST-800-171-3.4.7
+
+- name: "Detect Rsh Trust Files In Home Directories"
+  find:
+    paths: /home
+    recurse: yes
+    hidden: yes
+    patterns: '.rhosts'
+  check_mode: no
+  register: rhosts_file_locations
+  tags:
+    - CCE-27406-8
+    - NIST-800-53-AC-17(8)
+    - NIST-800-53-CM-7
+
+- name: "Remove Rsh Trust Files From Home Directories"
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ rhosts_file_locations.files }}"
+  when: rhosts_file_locations
+  tags:
+    - CCE-27406-8
+    - NIST-800-53-AC-17(8)
+    - NIST-800-53-CM-7
+
+- name: "Remove Rsh Trust Files - /etc/hosts.equiv"
+  file:
+    path: "/etc/hosts.equiv"
+    state: absent
+  tags:
+    - CCE-27406-8
+    - NIST-800-53-AC-17(8)
+    - NIST-800-53-CM-7

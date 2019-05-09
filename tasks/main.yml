@@ -1,2 +1,10 @@
 ---
 # tasks file for centos7-cui-compliance
+
+- name: Import Services Tasks
+  import_tasks: services.yml
+  when: centos7_cui_compliance_services_tasks
+
+- name: Import System Settings Tasks
+  import_tasks: system_settings.yml
+  when: centos7_cui_compliance_system_settings_tasks

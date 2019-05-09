@@ -1,0 +1,29 @@
+---
+
+- name: Test for existence /etc/cron.allow
+  stat:
+    path: /etc/cron.allow
+  check_mode: no
+  register: cron_allow_file_exists
+
+- name: Ensure file permissions on /etc/cron.allow
+  file:
+    path: /etc/cron.allow
+    group: root
+    owner: root
+  when: file_exists.stat.exists
+  tags:
+    - CCE-80379-1
+    - CCE-80378-3
+    - NIST-800-53-AC-6
+    - DISA-STIG-RHEL-07-021120
+    - DISA-STIG-RHEL-07-021110
+
+- name: Ensure crond service is enabled
+  service:
+    name: crond
+    enabled: yes
+    state: started
+  tags:
+    - CCE-27323-5
+    - NIST-800-53-CM-7
