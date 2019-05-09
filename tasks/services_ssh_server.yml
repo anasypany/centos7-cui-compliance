@@ -3,7 +3,7 @@
 - name: "Disable SSH Support for User Known Hosts"
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?IgnoreUserKnownHosts'
     line: "IgnoreUserKnownHosts yes"
     validate: /usr/sbin/sshd -t -f %s
@@ -18,7 +18,7 @@
 - name: Disable SSH Access via Empty Passwords
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?PermitEmptyPasswords'
     line: "PermitEmptyPasswords no"
     validate: /usr/sbin/sshd -t -f %s
@@ -36,7 +36,7 @@
 - name: Set SSH Client Alive Count
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?ClientAliveCountMax'
     line: "ClientAliveCountMax {{ services_ssh_server_sshd_set_keepalive }}"
     validate: /usr/sbin/sshd -t -f %s
@@ -53,7 +53,7 @@
 - name: Set SSH Idle Timeout Interval
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?ClientAliveInterval'
     line: "ClientAliveInterval {{ services_ssh_server_sshd_idle_timeout_value }}"
     validate: /usr/sbin/sshd -t -f %s
@@ -70,7 +70,7 @@
 - name: Enable SSH Warning Banner
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?Banner'
     line: "Banner /etc/issue"
     validate: /usr/sbin/sshd -t -f %s
@@ -89,7 +89,7 @@
 - name: "Use Only Approved MACs"
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?MACs'
     line: "MACs {{ services_ssh_server_sshd_approved_macs }}"
     validate: /usr/sbin/sshd -t -f %s
@@ -108,7 +108,7 @@
 - name: Do Not Allow SSH Environment Options
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?PermitUserEnvironment'
     line: "PermitUserEnvironment no"
     validate: /usr/sbin/sshd -t -f %s
@@ -123,7 +123,7 @@
 - name: "Disable Kerberos Authentication"
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?kerberosauthentication'
     line: "KerberosAuthentication no"
     validate: /usr/sbin/sshd -t -f %s
@@ -136,7 +136,7 @@
 
 - name: "Allow Only SSH Protocol 2"
   lineinfile:
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?Protocol [0-9]'
     line: "Protocol 2"
     validate: /usr/sbin/sshd -t -f %s
@@ -153,7 +153,7 @@
 - name: Disable SSH Support for .rhosts Files
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?IgnoreRhosts'
     line: "IgnoreRhosts yes"
     validate: /usr/sbin/sshd -t -f %s
@@ -169,7 +169,7 @@
 - name: Disable SSH Support for Rhosts RSA Authentication
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?RhostsRSAAuthentication'
     line: "RhostsRSAAuthentication no"
     validate: /usr/sbin/sshd -t -f %s
@@ -184,7 +184,7 @@
 - name: Enable Encrypted X11 Forwarding
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?X11Forwarding'
     line: "X11Forwarding yes"
     validate: /usr/sbin/sshd -t -f %s
@@ -198,7 +198,7 @@
 - name: Use Only Approved Ciphers
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?Ciphers'
     line: "Ciphers {{ services_ssh_server_sshd_approved_ciphers }}"
     validate: /usr/sbin/sshd -t -f %s
@@ -221,7 +221,7 @@
 - name: Disable Host-Based Authentication
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?HostbasedAuthentication'
     line: "HostbasedAuthentication no"
   tags:
@@ -235,7 +235,7 @@
 - name: "Enable Use of Strict Mode Checking"
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?StrictModes'
     line: "StrictModes yes"
     validate: /usr/sbin/sshd -t -f %s
@@ -250,7 +250,7 @@
 - name: "Enable use of Privilege Separation"
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?useprivilegeseparation'
     line: "UsePrivilegeSeparation sandbox"
     validate: /usr/sbin/sshd -t -f %s
@@ -265,7 +265,7 @@
 - name: "Disable GSSAPI Authentication"
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?gssapiauthentication'
     line: "GSSAPIAuthentication no"
     validate: /usr/sbin/sshd -t -f %s
@@ -280,7 +280,7 @@
 - name: "Disable Compression or Set Compression to delayed"
   lineinfile:
     create: yes
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '(?i)^#?Compression'
     line: "Compression delayed"
     validate: /usr/sbin/sshd -t -f %s
@@ -294,7 +294,7 @@
 - name: "Disable SSH Root Login"
   lineinfile:
     create: yes
-    dest: "/etc/ssh/sshd_config"
+    path: "/etc/ssh/sshd_config"
     regexp: "(?i)^#?PermitRootLogin"
     line: "PermitRootLogin no"
     insertafter: '(?i)^#? Authentication'
