@@ -1,6 +1,9 @@
 ---
 # tasks file for centos7-cui-compliance
 
+- name: Populate service facts
+  service_facts:
+
 - name: Import Services Tasks
   import_tasks: services.yml
   when: centos7_cui_compliance_services_tasks

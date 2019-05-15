@@ -1,8 +1,5 @@
 ---
 
-- name: Populate service facts
-  service_facts:
-
 - name: Import Obsolete Tasks
   import_tasks: services_obsolete_services.yml
   when: centos7_cui_compliance_services_obsolete_services_tasks
