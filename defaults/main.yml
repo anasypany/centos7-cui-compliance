@@ -59,11 +59,28 @@ centos7_cui_compliance_system_settings_configure_syslog_tasks: true
 # System Settings - Network Configuration and Firewalls Variables
 centos7_cui_compliance_system_settings_network_configuration_and_firewalls_tasks: true
 system_settings_network_configuration_and_firewalls_disable_ipv6_autoconf: true
-system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_source_route_value: '0'
-system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_source_route_value: '0'
-system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_forwarding_value: '0'
-system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_redirects_value: '0'
-system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_redirects_value: '0'
-system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_ra_value: '0'
-system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_ra_value: '0'
+system_settings_network_configuration_and_firewalls_sysctl_config:
+  - {'name': 'net.ipv6.conf.all.accept_source_route', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv6.conf.default.accept_source_route', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv6.conf.all.forwarding', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv6.conf.all.accept_redirects', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv6.conf.default.accept_redirects', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv6.conf.all.accept_ra', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv6.conf.default.accept_ra', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv6.conf.all.disable_ipv6', 'value': '1', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.default.accept_source_route', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.icmp_ignore_bogus_error_responses', 'value': '1', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.default.accept_redirects', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.default.rp_filter', 'value': '1', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.all.secure_redirects', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.all.accept_source_route', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.tcp_syncookies', 'value': '1', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.all.accept_redirects', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.all.log_martians', 'value': '1', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.all.rp_filter', 'value': '1', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.icmp_echo_ignore_broadcasts', 'value': '1', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.default.secure_redirects', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.default.log_martians', 'value': '1', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.all.send_redirects', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
+  - {'name': 'net.ipv4.conf.default.send_redirects', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
 system_settings_network_configuration_and_firewalls_ipv6_privacy: false

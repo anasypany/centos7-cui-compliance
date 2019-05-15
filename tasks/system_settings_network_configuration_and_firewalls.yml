@@ -8,83 +8,52 @@
   loop: "{{ ansible_interfaces }}"
   when: system_settings_network_configuration_and_firewalls_disable_ipv6_autoconf
 
-- name: Configure Kernel Parameter for Accepting IPv6 Source-Routed Packets on All Interface
+- name: Configure Networking Kernel Parameters - IPv4 & IPv6
   sysctl:
-    name: net.ipv6.conf.all.accept_source_route
-    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_source_route_value }}"
-    state: present
-    reload: yes
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: "{{ item.state }}"
+    sysctl_set: "{{ item.sysctl_set }}"
+    reload: "{{ item.reload }}"
+  loop: "{{ system_settings_network_configuration_and_firewalls_sysctl_config }}"
   tags:
     - CCE-80179-5
-    - NIST-800-53-AC-4
-    - NIST-800-171-3.1.20
-    - DISA-STIG-RHEL-07-040830
-
-- name: Configure Kernel Parameter for Accepting IPv6 Source-Routed Packets by Default
-  sysctl:
-    name: net.ipv6.conf.default.accept_source_route
-    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_source_route_value }}"
-    state: present
-    reload: yes
-  tags:
     - CCE-80335-1
-    - NIST-800-53-AC-4
-    - NIST-800-171-3.1.20
-
-- name: Configure Kernel Parameter for IPv6 Forwarding (Default is Disabled)
-  sysctl:
-    name: net.ipv6.conf.all.forwarding
-    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_forwarding_value }}"
-    state: present
-    reload: yes
-  tags:
     - CCE-80356-9
+    - CCE-80182-9
+    - CCE-80183-7
+    - CCE-80180-3
+    - CCE-80181-1
+    - CCE-80175-3
+    - CCE-80162-1
+    - CCE-80166-2
+    - CCE-80163-9
+    - CCE-80168-8
+    - CCE-80159-7
+    - CCE-27434-0
+    - CCE-27495-1
+    - CCE-80158-9
+    - CCE-80160-5
+    - CCE-80167-0
+    - CCE-80165-4
+    - CCE-80164-7
+    - CCE-80161-3
+    - CCE-80156-3
+    - NIST-800-53-AC-4
+    - NIST-800-53-AC-17(7)
     - NIST-800-53-CM-7
     - NIST-800-53-SC-5
-
-- name: Configure Kernel Parameter for Accepting IPv6 Redirects on All Interfaces
-  sysctl:
-    name: net.ipv6.conf.all.accept_redirects
-    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_redirects_value }}"
-    state: present
-    reload: yes
-  tags:
-    - CCE-80182-9
-    - NIST-800-53-CM-7
+    - NIST-800-53-SC-7
     - NIST-800-171-3.1.20
+    - DISA-STIG-RHEL-07-040830
+    - DISA-STIG-RHEL-07-040620
+    - DISA-STIG-RHEL-07-040640
+    - DISA-STIG-RHEL-07-040610
+    - DISA-STIG-RHEL-07-040641
+    - DISA-STIG-RHEL-07-040630
+    - DISA-STIG-RHEL-07-040660
+    - DISA-STIG-RHEL-07-040650
 
-- name: Configure Kernel Parameter for Accepting IPv6 Redirects by Default
-  sysctl:
-    name: net.ipv6.conf.default.accept_redirects
-    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_redirects_value }}"
-    state: present
-    reload: yes
-  tags:
-    - CCE-80183-7
-    - NIST-800-53-CM-7
-    - NIST-800-171-3.1.20
-
-- name: Configure Kernel Parameter for Accepting IPv6 Router Advertisements on All Interfaces
-  sysctl:
-    name: net.ipv6.conf.all.accept_ra
-    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_all_accept_ra_value }}"
-    state: present
-    reload: yes
-  tags:
-    - CCE-80180-3
-    - NIST-800-53-CM-7
-    - NIST-800-171-3.1.20
-
-- name: Configure Kernel Parameter for Accepting IPv6 Router Advertisements by Default
-  sysctl:
-    name: net.ipv6.conf.default.accept_ra
-    value: "{{ system_settings_network_configuration_and_firewalls_net_ipv6_conf_default_accept_ra_value }}"
-    state: present
-    reload: yes
-  tags:
-    - CCE-80181-1
-    - NIST-800-53-CM-7
-    - NIST-800-171-3.1.20
 
 - name: Use Privacy Extensions for Automatic Generation of IPv6 Addresses
   lineinfile:
@@ -124,3 +93,15 @@
   - NIST-800-171-3.4.7
   - NIST-800-171-3.13.6
   - DISA-STIG-RHEL-07-040810
+
+- name: Verify firewalld Service is Started and Enabled
+  service:
+    name: firewalld
+    enabled: yes
+    state: started
+  tags:
+    - CCE-27361-5
+    - NIST-800-53-CM-6(b)
+    - NIST-800-171-3.1.3
+    - NIST-800-171-3.4.7
+    - DISA-STIG-RHEL-07-040520
