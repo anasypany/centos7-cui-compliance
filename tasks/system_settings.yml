@@ -11,3 +11,7 @@
 - name: Import Network Configuration and Firewalls Tasks
   import_tasks: system_settings_network_configuration_and_firewalls.yml
   when: centos7_cui_compliance_system_settings_network_configuration_and_firewalls_tasks
+
+- name: Import SELinux Tasks
+  import_tasks: system_settings_selinux.yml
+  when: centos7_cui_compliance_system_settings_selinux_tasks
