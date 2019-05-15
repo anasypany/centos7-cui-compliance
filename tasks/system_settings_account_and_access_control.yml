@@ -527,7 +527,7 @@
     - DISA-STIG-RHEL-07-010050
 
 #Start Protect Accounts by Restricting Password-Based Login Tasks
-#Start Set Password Expiration Parameters
+#Start Set Password Expiration Parameters Tasks
 
 - name: Set Password Minimum Length in login.defs
   lineinfile:
@@ -579,3 +579,121 @@
     - NIST-800-53-IA-5(1)(d)
     - NIST-800-171-3.5.6
     - DISA-STIG-RHEL-07-010250
+#End Set Password Expiration Parameters Tasks
+#Start Restrict Root Logins
+- name: Check that only root has UID of 0
+  shell: |
+    awk -F: '$3 == 0 && $1 != "root" { print $1 }' /etc/passwd
+  check_mode: no
+  changed_when: no
+  register: account_uid_check
+  tags:
+    - CCE-27175-9
+    - NIST-800-53-AC-6
+    - NIST-800-53-IA-2
+    - NIST-800-53-IA-2(1)
+    - NIST-800-53-IA-4
+    - NIST-800-171-3.1.1
+    - NIST-800-171-3.1.5
+    - DISA-STIG-RHEL-07-020310
+
+- name: Lock Any Non-root Account That Has UID 0
+  shell: |
+    passwd -l {{ item|quote }}
+  loop: "{{ account_uid_check.stdout_lines }}"
+  when:
+    - account_uid_check is defined
+    - account_uid_check.stdout != ''
+  tags:
+    - CCE-27175-9
+    - NIST-800-53-AC-6
+    - NIST-800-53-IA-2
+    - NIST-800-53-IA-2(1)
+    - NIST-800-53-IA-4
+    - NIST-800-171-3.1.1
+    - NIST-800-171-3.1.5
+    - DISA-STIG-RHEL-07-020310
+
+- name: Test for existence /etc/securetty
+  stat:
+    path: /etc/securetty
+  register: securetty_test
+  check_mode: no
+  tags:
+    - CCE-27294-8
+    - NIST-800-53-IA-2
+    - NIST-800-53-IA-2(1)
+    - NIST-800-171-3.1.1
+    - NIST-800-171-3.1.6
+
+- name: Direct root Logins Not Allowed
+  shell: |
+    echo > /etc/securetty
+  changed_when: securetty_test.stat.size > "1"
+  when: securetty_test.stat is defined
+  tags:
+    - CCE-27294-8
+    - NIST-800-53-IA-2
+    - NIST-800-53-IA-2(1)
+    - NIST-800-171-3.1.1
+    - NIST-800-171-3.1.6
+
+- name: Restrict Virtual Console Root Logins
+  lineinfile:
+    path: /etc/securetty
+    regexp: '^vc'
+    state: absent
+  tags:
+    - CCE-27318-5
+    - NIST-800-53-AC-6(2)
+    - NIST-800-53-IA-2
+    - NIST-800-171-3.1.1
+    - NIST-800-171-3.1.5
+
+- name: Restrict Serial Port Root Logins
+  lineinfile:
+    path: /etc/securetty
+    regexp: '^ttyS[0-9]'
+    state: absent
+  tags:
+    - CCE-27268-2
+    - NIST-800-53-AC-6(2)
+    - NIST-800-53-IA-2
+    - NIST-800-171-3.1.1
+    - NIST-800-171-3.1.5
+
+#End Restrict Root Logins
+#Set Account Expiration Parameters
+- name: Set Account Expiration Following Inactivity
+  lineinfile:
+    create: yes
+    path: /etc/default/useradd
+    regexp: '^INACTIVE'
+    line: "INACTIVE={{ system_settings_account_and_access_control_account_disable_post_pw_expiration }}"
+  tags:
+    - CCE-27355-7
+    - NIST-800-53-AC-2(2)
+    - NIST-800-53-AC-2(3)
+    - NIST-800-53-IA-4(e)
+    - NIST-800-171-3.5.6
+    - DISA-STIG-RHEL-07-010310
+
+#Start Verify Proper Storage and Existence of Password Hashes
+
+- name: Prevent Log In to Accounts With Empty Password
+  replace:
+    path: "/etc/pam.d/{{ item }}"
+    follow: yes
+    regexp: 'nullok'
+  loop:
+    - 'system-auth'
+    - 'password-auth'
+  tags:
+    - CCE-27286-4
+    - NIST-800-53-AC-6
+    - NIST-800-53-IA-5(b)
+    - NIST-800-53-IA-5(c)
+    - NIST-800-53-IA-5(1)(a)
+    - NIST-800-171-3.1.1
+    - NIST-800-171-3.1.5
+    - DISA-STIG-RHEL-07-010290
