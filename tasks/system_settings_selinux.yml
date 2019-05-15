@@ -1,0 +1,51 @@
+---
+
+- name: Ensure libsemanage-python is installed
+  package:
+    name: libsemanage-python
+    state: latest
+
+- name: Set SELinux Booleans
+  seboolean:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    persistent: "{{ item.persistent }}"
+  loop: "{{ system_settings_selinux_boolean_list }}"
+  when: system_settings_selinux_boolean
+  tags:
+    - NIST-800-171-3.1.2
+    - NIST-800-171-3.7.2
+
+- name: Ensure SELinux Not Disabled in /etc/default/grub
+  replace:
+    path: /etc/default/grub
+    regexp: 'selinux=0'
+  tags:
+    - CCE-26961-3
+    - NIST-800-53-AC-3
+    - NIST-800-53-AC-3(3)
+    - NIST-800-53-AC-3(4)
+    - NIST-800-53-AC-4
+    - NIST-800-53-AC-6
+    - NIST-800-53-AU-9
+    - NIST-800-53-SI-6(a)
+    - NIST-800-171-3.1.2
+    - NIST-800-171-3.7.2
+
+- name: Configure SELinux Policy and Mode
+  selinux:
+    conf: /etc/selinux/config
+    policy: "{{ system_settings_selinux_policy}}"
+    state: "{{ system_settings_selinux_state }}"
+  tags:
+    - CCE-27279-9
+    - NIST-800-53-AC-3
+    - NIST-800-53-AC-3(3)
+    - NIST-800-53-AC-3(4)
+    - NIST-800-53-AC-4
+    - NIST-800-53-AC-6
+    - NIST-800-53-AU-9
+    - NIST-800-53-SI-6(a)
+    - NIST-800-171-3.1.2
+    - NIST-800-171-3.7.2
+    - DISA-STIG-RHEL-07-020220

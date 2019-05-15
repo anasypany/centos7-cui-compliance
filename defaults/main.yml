@@ -84,3 +84,71 @@ system_settings_network_configuration_and_firewalls_sysctl_config:
   - {'name': 'net.ipv4.conf.all.send_redirects', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
   - {'name': 'net.ipv4.conf.default.send_redirects', 'value': '0', 'state': 'present', 'sysctl_set': 'yes', 'reload': 'yes'}
 system_settings_network_configuration_and_firewalls_ipv6_privacy: false
+
+# System Settings - SELinux Variables
+centos7_cui_compliance_system_settings_selinux_tasks: true
+system_settings_selinux_policy: 'targeted'
+system_settings_selinux_state: 'enforcing'
+system_settings_selinux_boolean: true
+system_settings_selinux_boolean_list:
+  - {'name': 'ssh_sysadm_login', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_execstack', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'xguest_connect_network', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'gpg_web_anon_write', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'mount_anyfile', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'login_console_enabled', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'cron_can_relabel', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'xdm_write_home', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'logadm_exec_content', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'user_exec_content', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'deny_ptrace', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'guest_exec_content', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'xserver_object_manager', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'xdm_sysadm_login', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'sysadm_exec_content', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_mysql_connect_enabled', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'kerberos_enabled', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'xguest_mount_media', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'ssh_keysign', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'xserver_execmem', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'cron_userdomain_transition', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'xdm_bind_vnc_tcp_port', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_rw_noexattrfile', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'deny_execmem', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'ssh_chroot_rw_homedirs', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'abrt_anon_write', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'logging_syslogd_use_tty', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'abrt_handle_event', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'mock_enable_homedirs', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'auditadm_exec_content', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'xguest_exec_content', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'unconfined_login', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'logging_syslogd_can_sendmail', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_postgresql_connect_enabled', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'daemons_use_tcp_wrapper', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'abrt_upload_watch_anon_write', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'daemons_use_tty', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_tcp_server', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'staff_exec_content', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_direct_dri_enabled', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'xserver_clients_write_xshm', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'use_ecryptfs_home_dirs', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_use_ssh_chroot', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'domain_fd_use', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_udp_server', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'mmap_low_allowed', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_share_music', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_execmod', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'cron_system_cronjob_use_shares', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'secure_mode', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'xguest_use_bluetooth', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_execheap', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'secure_mode_policyload', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'daemons_dump_core', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'xdm_exec_bootloader', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'fips_mode', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'polyinstantiation_enabled', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'domain_kernel_load_modules', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'secure_mode_insmod', 'state': 'no', 'persistent': 'yes'}
+  - {'name': 'selinuxuser_ping', 'state': 'yes', 'persistent': 'yes'}
+  - {'name': 'secadm_exec_content', 'state': 'yes', 'persistent': 'yes'}
