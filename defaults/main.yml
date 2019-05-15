@@ -152,3 +152,22 @@ system_settings_selinux_boolean_list:
   - {'name': 'secure_mode_insmod', 'state': 'no', 'persistent': 'yes'}
   - {'name': 'selinuxuser_ping', 'state': 'yes', 'persistent': 'yes'}
   - {'name': 'secadm_exec_content', 'state': 'yes', 'persistent': 'yes'}
+
+# System Settings - Account and Access Control Variables
+centos7_cui_compliance_system_settings_account_and_access_control_tasks: true
+system_settings_account_and_access_control_password_pam_minlen: '15'
+system_settings_account_and_access_control_password_pam_maxclassrepeat: '4'
+system_settings_account_and_access_control_password_pam_dcredit: '-1'
+system_settings_account_and_access_control_password_pam_minclass: '4'
+system_settings_account_and_access_control_password_pam_difok: '8'
+system_settings_account_and_access_control_password_pam_ocredit: '-1'
+system_settings_account_and_access_control_password_pam_lcredit: '-1'
+system_settings_account_and_access_control_password_pam_ucredit: '-1'
+system_settings_account_and_access_control_user_umask: '077'
+system_settings_account_and_access_control_accounts_tmout: '600'
+system_settings_account_and_access_control_accounts_fail_delay: '4'
+system_settings_account_and_access_control_accounts_max_concurrent_login_sessions: '10'
+system_settings_account_and_access_control_accounts_password_minlen_login_defs: '6'
+system_settings_account_and_access_control_accounts_password_warn_age_login_defs: '7'
+system_settings_account_and_access_control_accounts_password_minimum_age_login_defs: '1'
+system_settings_account_and_access_control_accounts_password_maximum_age_login_defs: '180'

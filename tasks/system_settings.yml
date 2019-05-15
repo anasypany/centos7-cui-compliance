@@ -15,3 +15,7 @@
 - name: Import SELinux Tasks
   import_tasks: system_settings_selinux.yml
   when: centos7_cui_compliance_system_settings_selinux_tasks
+
+- name: Import Account and Access Control Tasks
+  import_tasks: system_settings_account_and_access_control.yml
+  when: centos7_cui_compliance_system_settings_account_and_access_control_tasks
