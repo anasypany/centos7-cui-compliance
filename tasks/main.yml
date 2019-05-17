@@ -6,8 +6,8 @@
 
 - name: Import Services Tasks
   import_tasks: services.yml
-  when: centos7_cui_compliance_services_tasks
+  when: centos7_cui_compliance_services_tasks|bool
 
 - name: Import System Settings Tasks
   import_tasks: system_settings.yml
-  when: centos7_cui_compliance_system_settings_tasks
+  when: centos7_cui_compliance_system_settings_tasks|bool

@@ -2,16 +2,16 @@
 
 - name: Import Obsolete Tasks
   import_tasks: services_obsolete_services.yml
-  when: centos7_cui_compliance_services_obsolete_services_tasks
+  when: centos7_cui_compliance_services_obsolete_services_tasks|bool
 
 - name: Import Cron and At Daemons Tasks
   import_tasks: services_cron_and_at_daemons.yml
-  when: centos7_cui_compliance_services_cron_and_at_daemons_tasks
+  when: centos7_cui_compliance_services_cron_and_at_daemons_tasks|bool
 
 - name: Import SSSD Tasks
   import_tasks: services_sssd.yml
-  when: centos7_cui_compliance_services_sssd_tasks
+  when: centos7_cui_compliance_services_sssd_tasks|bool
 
 - name: Import SSH Server Tasks
   import_tasks: services_ssh_server.yml
-  when: centos7_cui_compliance_services_ssh_server_tasks
+  when: centos7_cui_compliance_services_ssh_server_tasks|bool

@@ -2,20 +2,24 @@
 
 - name: Import Installing and Maintaining Software Tasks
   import_tasks: system_settings_installing_and_maintaining_software.yml
-  when: centos7_cui_compliance_system_settings_installing_and_maintaining_software_tasks
+  when: centos7_cui_compliance_system_settings_installing_and_maintaining_software_tasks|bool
 
 - name: Import Configure Syslog Tasks
   import_tasks: system_settings_configure_syslog.yml
-  when: centos7_cui_compliance_system_settings_configure_syslog_tasks
+  when: centos7_cui_compliance_system_settings_configure_syslog_tasks|bool
 
 - name: Import Network Configuration and Firewalls Tasks
   import_tasks: system_settings_network_configuration_and_firewalls.yml
-  when: centos7_cui_compliance_system_settings_network_configuration_and_firewalls_tasks
+  when: centos7_cui_compliance_system_settings_network_configuration_and_firewalls_tasks|bool
 
 - name: Import SELinux Tasks
   import_tasks: system_settings_selinux.yml
-  when: centos7_cui_compliance_system_settings_selinux_tasks
+  when: centos7_cui_compliance_system_settings_selinux_tasks|bool
 
 - name: Import Account and Access Control Tasks
   import_tasks: system_settings_account_and_access_control.yml
-  when: centos7_cui_compliance_system_settings_account_and_access_control_tasks
+  when: centos7_cui_compliance_system_settings_account_and_access_control_tasks|bool
+
+- name: Import System Accounting with auditd Tasks
+  import_tasks: system_settings_auditd.yml
+  when: centos7_cui_compliance_system_settings_auditd_tasks|bool
