@@ -174,3 +174,39 @@ system_settings_account_and_access_control_accounts_password_warn_age_login_defs
 system_settings_account_and_access_control_accounts_password_minimum_age_login_defs: '1'
 system_settings_account_and_access_control_accounts_password_maximum_age_login_defs: '180'
 system_settings_account_and_access_control_account_disable_post_pw_expiration: '35'
+
+# System Settings - System Accounting with auditd
+centos7_cui_compliance_system_settings_auditd_tasks: true
+audit_daemon_config:
+  - {'name': 'local_events', 'value': 'yes', 'enabled': true}
+  - {'name': 'log_file', 'value': '/var/log/audit/audit.log', 'enabled': true}
+  - {'name': 'write_logs', 'value': 'yes', 'enabled': true}
+  - {'name': 'log_format', 'value': 'raw', 'enabled': true}
+  - {'name': 'log_group', 'value': 'root', 'enabled': true}
+  - {'name': 'priority_boost', 'value': '4', 'enabled': true}
+  - {'name': 'flush', 'value': 'data', 'enabled': true}
+  - {'name': 'freq', 'value': '100', 'enabled': false} # Only enable when flush value is incremental or incremental_sync
+  - {'name': 'num_logs', 'value': '5', 'enabled': true}
+  - {'name': 'disp_qos', 'value': 'lossy', 'enabled': true}
+  - {'name': 'dispatcher', 'value': '/sbin/audispd', 'enabled': true}
+  - {'name': 'name_format', 'value': 'none', 'enabled': true}
+  - {'name': 'name', 'value': 'admin', 'enabled': false} # Only enable when name_format value is user
+  - {'name': 'max_log_file', 'value': '8', 'enabled': true}
+  - {'name': 'max_log_file_action', 'value': 'rotate', 'enabled': true}
+  - {'name': 'action_mail_acct', 'value': 'root', 'enabled': true}
+  - {'name': 'space_left', 'value': '75', 'enabled': true}
+  - {'name': 'space_left_action', 'value': 'email', 'enabled': true}
+  - {'name': 'admin_space_left', 'value': '50', 'enabled': true}
+  - {'name': 'admin_space_left_action', 'value': 'single', 'enabled': true}
+  - {'name': 'disk_full_action', 'value': 'rotate', 'enabled': true}
+  - {'name': 'disk_error_action', 'value': 'suspend', 'enabled': true}
+  - {'name': 'tcp_listen_port', 'value': '60', 'enabled': false} # Used when collecting logs from audit daemons on other systems
+  - {'name': 'tcp_listen_queue', 'value': '5', 'enabled': false} # Used when collecting logs from audit daemons on other systems
+  - {'name': 'tcp_max_per_addr', 'value': '1', 'enabled': false} # Used when collecting logs from audit daemons on other systems
+  - {'name': 'use_libwrap', 'value': 'yes', 'enabled': true}
+  - {'name': 'tcp_client_ports', 'value': '1024-65535', 'enabled': false} # Used when collecting logs from audit daemons on other systems
+  - {'name': 'tcp_client_max_idle', 'value': '0', 'enabled': false} # Used when collecting logs from audit daemons on other systems
+  - {'name': 'enable_krb5', 'value': 'no', 'enabled': true}
+  - {'name': 'krb5_principal', 'value': 'auditd', 'enabled': true}
+  - {'name': 'krb5_key_file', 'value': '/etc/audit/audit.key', 'enabled': false} # Enable when using krb5 and key_file is present
+  - {'name': 'distribute_network', 'value': 'no', 'enabled': true}

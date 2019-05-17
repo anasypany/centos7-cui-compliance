@@ -1,0 +1,47 @@
+---
+
+#Start Configure auditd Data Retention
+
+- name: Apply auditd Configuration - /etc/audit/auditd.conf
+  template:
+    src: templates/auditd.conf.j2
+    dest: /etc/audit/auditd.conf
+    owner: root
+    group: root
+    mode: 0640
+  notify: reload auditd
+  tags:
+    - CCE-27331-8
+    - CCE-27319-3
+    - CCE-27394-6
+    - CCE-27370-6
+    - CCE-27231-0
+    - CCE-27375-5
+    - CCE-27348-2
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-4
+    - NIST-800-53-AU-5(1)
+    - NIST-800-53-AU-5(a)
+    - NIST-800-53-AU-5(b)
+    - NIST-800-53-AU-9
+    - NIST-800-53-AU-11
+    - NIST-800-53-AU-12(1)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.3.1
+    - DISA-STIG-RHEL-07-030350
+    - DISA-STIG-RHEL-07-030340
+
+
+- name: Configure auditd to use the audispd syslog plugin
+  lineinfile:
+    create: yes
+    path: /etc/audisp/plugins.d/syslog.conf
+    regexp: '(?i)^#?active'
+    line: "active = yes"
+  notify: restart auditd
+  tags:
+    - CCE-27341-7
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-3(2)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.3.1

@@ -12,3 +12,15 @@
     name: firewalld
     state: restarted
   listen: restart firewalld
+
+- name: Reload the auditd service
+  service:
+    name: auditd
+    state: reloaded
+  listen: reload auditd
+
+- name: Restart the auditd service
+  service:
+    name: auditd
+    state: restarted
+  listen: restart auditd

@@ -1,0 +1,11 @@
+#
+# This file controls the configuration of the audit daemon
+#
+
+{% for item in audit_daemon_config %}
+{% if item.enabled %}
+{{ item.name }} = {{ item.value }}
+{% else %}
+#{{ item.name }} = {{ item.value }}
+{% endif %}
+{% endfor %}
