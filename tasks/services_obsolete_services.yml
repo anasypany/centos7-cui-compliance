@@ -21,14 +21,14 @@
     - DISA-STIG-RHEL-07-021710
     - DISA-STIG-RHEL-07-020010
 
-- name: "Disable Obsolete Services"
+# Following task includes zebra & kdump services from later controls
+- name: Disable Obsolete Services and Sockets of Obsolete Services
   service:
     name: "{{ item }}"
     state: stopped
     enabled: no
-  register: service_result
-  failed_when: "service_result is failed and ('Could not find the requested service' not in service_result.msg)"
   loop: "{{ services_obsolete_services_disable_services }}"
+  when: (((item | splitext)[0] + '.service') in ansible_facts.services) or (((item | splitext)[0] + '@.service') in ansible_facts.services)
   tags:
     - CCE-27336-7
     - CCE-27337-5
@@ -36,32 +36,16 @@
     - CCE-27401-9
     - CCE-27385-4
     - CCE-27443-1
+    - CCE-27191-6
+    - CCE-80258-7
     - NIST-800-53-AC-17(8)
+    - NIST-800-53-CM-6(b)
     - NIST-800-53-CM-7
     - NIST-800-53-IA-5(1)(c)
+    - NIST-800-53-SC-32
     - NIST-800-171-3.1.13
     - NIST-800-171-3.4.7
-
-- name: "Disable Socket of Obsolete Services"
-  service:
-    name: "{{ item }}.socket"
-    state: stopped
-    enabled: no
-  register: socket_result
-  failed_when: "socket_result is failed and ('Could not find the requested service' not in socket_result.msg)"
-  loop: "{{ services_obsolete_services_disable_services }}"
-  tags:
-    - CCE-27336-7
-    - CCE-27337-5
-    - CCE-27408-4
-    - CCE-27401-9
-    - CCE-27385-4
-    - CCE-27443-1
-    - NIST-800-53-AC-17(8)
-    - NIST-800-53-CM-7
-    - NIST-800-53-IA-5(1)(c)
-    - NIST-800-171-3.1.13
-    - NIST-800-171-3.4.7
+    - DISA-STIG-RHEL-07-021300
 
 - name: "Detect Rsh Trust Files In Home Directories"
   find:

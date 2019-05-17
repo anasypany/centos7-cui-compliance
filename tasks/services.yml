@@ -8,36 +8,9 @@
   import_tasks: services_cron_and_at_daemons.yml
   when: centos7_cui_compliance_services_cron_and_at_daemons_tasks
 
-- name: Ensure Zebra Service is disabled
-  service:
-    name: zebra
-    state: stopped
-    enabled: no
-  when:
-    - "'zebra' in ansible_facts.services"
-    - centos7_cui_compliance_services_network_routing_tasks
-  tags:
-    - CCE-27191-6
-    - NIST-800-53-SC-32
-
 - name: Import SSSD Tasks
   import_tasks: services_sssd.yml
   when: centos7_cui_compliance_services_sssd_tasks
-
-- name: Ensure kdump service is disabled
-  service:
-    name: kdump
-    state: stopped
-    enabled: no
-  when:
-    - "'kdump' in ansible_facts.services"
-    - centos7_cui_compliance_services_base_services_tasks
-  tags:
-    - CCE-80258-7
-    - NIST-800-53-AC-17(8)
-    - NIST-800-53-CM-7
-    - NIST-800-53-CM-6(b)
-    - DISA-STIG-RHEL-07-021300
 
 - name: Import SSH Server Tasks
   import_tasks: services_ssh_server.yml

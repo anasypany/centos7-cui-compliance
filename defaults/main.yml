@@ -21,13 +21,15 @@ services_obsolete_services_uninstall_packages:
   - 'talk-server'
 
 services_obsolete_services_disable_services:
-  - 'rlogin'
-  - 'rexec'
-  - 'rsh'
-  - 'telnet'
+  - 'rlogin.socket'
+  - 'rexec.socket'
+  - 'rsh.socket'
+  - 'telnet.socket'
   - 'ypbind'
   - 'xinetd'
-
+  - 'zebra'
+  - 'kdump'
+  
 # Services - Cron and At Daemons Task Variables
 centos7_cui_compliance_services_cron_and_at_daemons_tasks: true
 
