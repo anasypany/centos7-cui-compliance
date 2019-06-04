@@ -1,0 +1,49 @@
+# Record Information on Kernel Modules Loading and Unloading
+{% for rule in audit_rules_modules %}
+{{ rule }}
+{% endfor %}
+
+# Record Attempts to Alter Logon and Logout Events
+{% for rule in audit_rules_logins %}
+{{ rule }}
+{% endfor %}
+
+# Record Events that Modify Date and Time Information
+{% for rule in audit_rules_time %}
+{{ rule }}
+{% endfor %}
+
+# Record Events that Modify the System's Discretionary Access Controls
+{% for rule in audit_rules_perm_mod %}
+{{ rule }}
+{% endfor %}
+
+#  Record File Deletion Events by User
+{% for rule in audit_rules_delete %}
+{{ rule }}
+{% endfor %}
+
+# Record Unauthorized Access Attempts Events to Files (unsuccessful)
+{% for rule in audit_rules_access %}
+{{ rule }}
+{% endfor %}
+
+# Ensure auditd Collects System Administrator Actions
+{% for rule in audit_rules_actions %}
+{{ rule }}
+{% endfor %}
+
+# Record Events that Modify the System's Network Environment
+{% for rule in audit_rules_network_config_mod %}
+{{ rule }}
+{% endfor %}
+
+# Record Attempts to Alter Process and Session Initiation Information
+{% for rule in audit_rules_session %}
+{{ rule }}
+{% endfor %}
+
+# Record Events that Modify User/Group Information
+{% for rule in audit_rules_user_group_mod %}
+{{ rule }}
+{% endfor %}

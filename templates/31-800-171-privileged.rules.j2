@@ -1,0 +1,9 @@
+# Record Execution Attempts to Run SELinux Privileged Commands
+{% for rule in audit_rules_privileged_selinux %}
+{{ rule }}
+{% endfor %}
+
+# Record Information on the Use of Privileged Commands
+{% for path in audit_rules_privileged_command_paths_combined %}
+-a always,exit -F path={{ path }} -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+{% endfor %}

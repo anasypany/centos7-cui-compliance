@@ -45,3 +45,203 @@
     - NIST-800-53-AU-3(2)
     - NIST-800-53-IR-5
     - NIST-800-171-3.3.1
+
+- name: Find Non-Mananged Rules Files
+  find:
+    paths: /etc/audit/rules.d
+    file_type: file
+    patterns: '*.rules'
+    exclude: '10-base-config.rules,30-800-171.rules,31-privileged.rules,99-finalize.rules'
+  register: rules_files_found
+
+- name: Remove Non-Managed Rules Files
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  loop: "{{ rules_files_found.files }}"
+
+- name: Ensure Main Audit Rules are Set
+  template:
+    src: templates/30-800-171.rules.j2
+    dest: /etc/audit/rules.d/30-800-171.rules
+    owner: root
+    group: root
+    mode: 0640
+  tags:
+    - CCE-80416-1
+    - CCE-80417-9
+    - CCE-80415-3
+    - CCE-80446-8
+    - CCE-80414-6
+    - CCE-80384-1
+    - CCE-80383-3
+    - CCE-80994-7
+    - CCE-27299-7
+    - CCE-27216-1
+    - CCE-27219-5
+    - CCE-27290-6
+    - CCE-27356-5
+    - CCE-27213-8
+    - CCE-27364-9
+    - CCE-27367-2
+    - CCE-27387-0
+    - CCE-27339-1
+    - CCE-27389-6
+    - CCE-27393-8
+    - CCE-27280-7
+    - CCE-27353-2
+    - CCE-27083-5
+    - CCE-27388-8
+    - CCE-27410-0
+    - CCE-80412-0
+    - CCE-80662-0
+    - CCE-27206-2
+    - CCE-80995-4
+    - CCE-80413-8
+    - CCE-80996-2
+    - CCE-80389-0
+    - CCE-80385-8
+    - CCE-80386-6
+    - CCE-80388-2
+    - CCE-80390-8
+    - CCE-80387-4
+    - CCE-27461-3
+    - CCE-27076-9
+    - CCE-27301-1
+    - NIST-800-53-AC-2(7)(b)
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-3(1)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-53-MA-4(1)(a)
+    - NIST-800-171-3.1.7
+    - DISA-STIG-RHEL-07-030370
+    - DISA-STIG-RHEL-07-030380
+    - DISA-STIG-RHEL-07-030390
+    - DISA-STIG-RHEL-07-030400
+    - DISA-STIG-RHEL-07-030410
+    - DISA-STIG-RHEL-07-030420
+    - DISA-STIG-RHEL-07-030430
+    - DISA-STIG-RHEL-07-030440
+    - DISA-STIG-RHEL-07-030450
+    - DISA-STIG-RHEL-07-030460
+    - DISA-STIG-RHEL-07-030470
+    - DISA-STIG-RHEL-07-030480
+    - DISA-STIG-RHEL-07-030490
+    - DISA-STIG-RHEL-07-030500
+    - DISA-STIG-RHEL-07-030510
+    - DISA-STIG-RHEL-07-030520
+    - DISA-STIG-RHEL-07-030530
+    - DISA-STIG-RHEL-07-030540
+    - DISA-STIG-RHEL-07-030550
+    - DISA-STIG-RHEL-07-030600
+    - DISA-STIG-RHEL-07-030610
+    - DISA-STIG-RHEL-07-030620
+    - DISA-STIG-RHEL-07-030700
+    - DISA-STIG-RHEL-07-030820
+    - DISA-STIG-RHEL-07-030840
+    - DISA-STIG-RHEL-07-030850
+    - DISA-STIG-RHEL-07-030860
+    - DISA-STIG-RHEL-07-030880
+    - DISA-STIG-RHEL-07-030890
+    - DISA-STIG-RHEL-07-030900
+    - DISA-STIG-RHEL-07-030910
+    - DISA-STIG-RHEL-07-030920
+
+- name: Discover list of Privileged Commands
+  shell: |
+    find / -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null
+  register: audit_rules_discovered_privileged_command_paths
+  tags:
+    - CCE-27437-3
+    - DISA-STIG-RHEL-07-030360
+    - NIST-800-171-3.1.7
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-2(4)
+    - NIST-800-53-AU-6(9)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+
+- name: Combine Discovered Privileged Command List with Defined Privileged Command List
+  set_fact:
+    audit_rules_privileged_command_paths_combined: "{{ audit_rules_privileged_command_paths | union(audit_rules_discovered_privileged_command_paths.stdout_lines) }}"
+
+- name: Ensure Privileged Audit Rules are Set
+  template:
+    src: templates/30-800-171.rules.j2
+    dest: /etc/audit/rules.d/30-800-171.rules
+    owner: root
+    group: root
+    mode: 0640
+  tags:
+    - CCE-80392-4
+    - CCE-80391-6
+    - CCE-80393-2
+    - CCE-80394-0
+    - CCE-80395-7
+    - CCE-80401-3
+    - CCE-80406-2
+    - CCE-80404-7
+    - CCE-80397-3
+    - CCE-80398-1
+    - CCE-80399-9
+    - CCE-80411-2
+    - CCE-80410-4
+    - CCE-80405-4
+    - CCE-80396-5
+    - CCE-80408-8
+    - CCE-80402-1
+    - CCE-80407-0
+    - CCE-27437-3
+    - CCE-80400-5
+    - CCE-80403-9
+    - NIST-800-53-AC-17(7)
+    - NIST-800-53-AU-1(b)
+    - NIST-800-53-AU-2(a)
+    - NIST-800-53-AU-2(c)
+    - NIST-800-53-AU-2(d)
+    - NIST-800-53-AU-2(4)
+    - NIST-800-53-AU-6(9)
+    - NIST-800-53-AU-12(a)
+    - NIST-800-53-AU-12(c)
+    - NIST-800-53-IR-5
+    - NIST-800-171-3.1.7
+    - DISA-STIG-RHEL-07-030360
+    - DISA-STIG-RHEL-07-030560
+    - DISA-STIG-RHEL-07-030570
+    - DISA-STIG-RHEL-07-030580
+    - DISA-STIG-RHEL-07-030630
+    - DISA-STIG-RHEL-07-030640
+    - DISA-STIG-RHEL-07-030650
+    - DISA-STIG-RHEL-07-030660
+    - DISA-STIG-RHEL-07-030670
+    - DISA-STIG-RHEL-07-030680
+    - DISA-STIG-RHEL-07-030690
+    - DISA-STIG-RHEL-07-030710
+    - DISA-STIG-RHEL-07-030720
+    - DISA-STIG-RHEL-07-030730
+    - DISA-STIG-RHEL-07-030750
+    - DISA-STIG-RHEL-07-030760
+    - DISA-STIG-RHEL-07-030770
+    - DISA-STIG-RHEL-07-030780
+    - DISA-STIG-RHEL-07-030800
+    - DISA-STIG-RHEL-07-030810
+
+- name: Make the auditd Configuration Immutable
+  template:
+    src: templates/99-finalize.rules.j2
+    dest: /etc/audit/rules.d/99-finalize.rules
+    owner: root
+    group: root
+    mode: 0640
+  tags:
