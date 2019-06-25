@@ -47,3 +47,13 @@
 {% for rule in audit_rules_user_group_mod %}
 {{ rule }}
 {% endfor %}
+
+# Ensure auditd Collects Information on Exporting to Media (successful)
+{% for rule in audit_rules_export %}
+{{ rule }}
+{% endfor %}
+
+# Record Events that Modify the System's Mandatory Access Controls
+{% for rule in audit_rules_mac_policy %}
+{{ rule }}
+{% endfor %}

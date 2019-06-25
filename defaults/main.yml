@@ -184,8 +184,8 @@ audit_daemon_config:
   - {'name': 'log_format', 'value': 'raw', 'enabled': true}
   - {'name': 'log_group', 'value': 'root', 'enabled': true}
   - {'name': 'priority_boost', 'value': '4', 'enabled': true}
-  - {'name': 'flush', 'value': 'data', 'enabled': true}
-  - {'name': 'freq', 'value': '100', 'enabled': false} # Only enable when flush value is incremental or incremental_sync
+  - {'name': 'flush', 'value': 'incremental_async', 'enabled': true}
+  - {'name': 'freq', 'value': '100', 'enabled': true} # Only enable when flush value is incremental or incremental_sync
   - {'name': 'num_logs', 'value': '5', 'enabled': true}
   - {'name': 'disp_qos', 'value': 'lossy', 'enabled': true}
   - {'name': 'dispatcher', 'value': '/sbin/audispd', 'enabled': true}
@@ -210,6 +210,12 @@ audit_daemon_config:
   - {'name': 'krb5_principal', 'value': 'auditd', 'enabled': true}
   - {'name': 'krb5_key_file', 'value': '/etc/audit/audit.key', 'enabled': false} # Enable when using krb5 and key_file is present
   - {'name': 'distribute_network', 'value': 'no', 'enabled': true}
+
+audit_control_rule_buffer_size: "8192"
+
+audit_control_rule_failure_mode: "2"
+
+audit_control_rule_enable_mode: "2"
 
 audit_arch: "b{{ ansible_architecture | regex_replace('.*(\\d\\d$)','\\1') }}"
 
@@ -276,6 +282,12 @@ audit_rules_user_group_mod:
   - '-w /etc/gshadow -p wa -k user_group_mod'
   - '-w /etc/passwd -p wa -k user_group_mod'
   - '-w /etc/group -p wa -k user_group_mod'
+
+audit_rules_export:
+  - '-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k export'
+
+audit_rules_mac_policy:
+  - '-w /etc/selinux/ -p wa -k MAC-policy'
 
 audit_rules_privileged_selinux:
   - '-a always,exit -F path=/usr/sbin/setsebool -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged'

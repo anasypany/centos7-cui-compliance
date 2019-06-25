@@ -1,0 +1,10 @@
+## First Rule - delete all
+-D
+
+## Set Buffer Size
+## Increase this value for heavily stressed systems
+-b {{ audit_control_rule_buffer_size }}
+
+## Set the audit failure mode
+## Values: 0 (silent), 1 (printk, print a falure message), 2 (panic, halt the system)
+-f {{ audit_control_rule_failure_mode }}

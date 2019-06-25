@@ -13,14 +13,76 @@
     state: restarted
   listen: restart firewalld
 
+# sysvinit is used to reload auditd see https://bugzilla.redhat.com/show_bug.cgi?id=1647521
 - name: Reload the auditd service
-  service:
-    name: auditd
-    state: reloaded
+  command: service auditd reload
+#    name: auditd
+#    state: reloaded
   listen: reload auditd
 
+- name: Load Audit Rules from .rules in /etc/audit/rules.d
+  command: augenrules --load
+  listen: Reload audit rules
+
+## Force the service module here to use "service" due to issues with auditd and systemd
+# - name: Restart the auditd service
+#   service:
+#     name: auditd
+#     state: restarted
+#     use: service
+#   listen: restart auditd
+
+- name: Change RefuseManualStop to no
+  lineinfile:
+    path: /usr/lib/systemd/system/auditd.service
+    regexp: '^RefuseManualStop='
+    line: "RefuseManualStop=no"
+  listen: restart auditd
+
+- name: Systemd daemon reload
+  systemd:
+    daemon_reload: yes
+  listen: restart auditd
+
 - name: Restart the auditd service
-  service:
+  systemd:
     name: auditd
     state: restarted
   listen: restart auditd
+
+- name: Change RefuseManualStop Back to yes
+  lineinfile:
+    path: /usr/lib/systemd/system/auditd.service
+    regexp: '^RefuseManualStop='
+    line: "RefuseManualStop=yes"
+  listen: restart auditd
+
+- name: Systemd daemon reload
+  systemd:
+    daemon_reload: yes
+  listen: restart auditd
+
+- name: Update GRUB 2 Configuration File - Test for BIOS vs UEFI
+  stat:
+    path: /sys/firmware/efi
+  check_mode: no
+  register: bios_uefi_test
+  listen: Rebuild grub config
+
+- name: Update GRUB 2 Configuration File - UEFI-based machine
+  command: grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg
+  listen: Rebuild grub config
+  when:
+    - bios_uefi_test.stat is defined
+    - bios_uefi_test.stat.exists
+
+- name: Update GRUB 2 Configuration File - BIOS-based machine
+  command: grub2-mkconfig -o /boot/grub2/grub.cfg
+  listen: Rebuild grub config
+  when:
+    - bios_uefi_test.stat is defined
+    - not bios_uefi_test.stat.exists
+
+- name: Restart the target server
+  reboot:
+  listen: Reboot server
