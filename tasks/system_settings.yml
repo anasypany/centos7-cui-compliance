@@ -23,3 +23,7 @@
 - name: Import System Accounting with auditd Tasks
   import_tasks: system_settings_auditd.yml
   when: centos7_cui_compliance_system_settings_auditd_tasks|bool
+
+- name: Import File Permissions and Masks Tasks
+  import_tasks: system_settings_file_permissions_and_masks.yml
+  when: centos7_cui_compliance_system_settings_file_permissions_and_masks|bool

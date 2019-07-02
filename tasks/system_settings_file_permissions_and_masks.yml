@@ -1,0 +1,155 @@
+---
+
+# OpenScap Guide was missing control settings for the group verify permissions on important files and directories
+
+
+# Start Restrict Dynamic Mounting and Unmounting of Filesystems
+- name: Ensure kernel module 'usb-storage' is disabled
+  lineinfile:
+    create: true
+    path: /etc/modprobe.d/usb-storage.conf
+    regexp: '^.*usb-storage.*$'
+    line: "install usb-storage /bin/true"
+  tags:
+    - CCE-27277-3
+    - DISA-STIG-RHEL-07-020100
+    - NIST-800-171-3.1.21
+    - NIST-800-53-AC-19(a)
+    - NIST-800-53-AC-19(d)
+    - NIST-800-53-AC-19(e)
+    - NIST-800-53-IA-3
+    - NIST-800-53-MP-7
+
+- name: Ensure kernel module 'freevxfs' is disabled
+  lineinfile:
+    create: true
+    path: /etc/modprobe.d/freevxfs.conf
+    regexp: '^.*freevxfs.*$'
+    line: "install freevxfs /bin/true"
+  tags:
+    - CCE-80138-1
+    - NIST-800-171-3.4.6
+    - NIST-800-53-CM-7
+
+- name: Disable service autofs
+  service:
+    name: autofs
+    enabled: 'no'
+    state: stopped
+  register: autofs_service_result
+  failed_when: autofs_service_result is failed and ('Could not find the requested service' not in autofs_service_result.msg)
+  tags:
+    - CCE-27498-5
+    - DISA-STIG-RHEL-07-020110
+    - NIST-800-171-3.4.6
+    - NIST-800-53-AC-19(a)
+    - NIST-800-53-AC-19(d)
+    - NIST-800-53-AC-19(e)
+    - NIST-800-53-IA-3
+
+- name: Disable socket of service autofs if applicable
+  service:
+    name: autofs.socket
+    enabled: 'no'
+    state: stopped
+  register: socket_result
+  failed_when: socket_result is failed and ('Could not find the requested service' not in socket_result.msg)
+  tags:
+    - CCE-27498-5
+    - DISA-STIG-RHEL-07-020110
+    - NIST-800-171-3.4.6
+    - NIST-800-53-AC-19(a)
+    - NIST-800-53-AC-19(d)
+    - NIST-800-53-AC-19(e)
+    - NIST-800-53-IA-3
+
+- name: Ensure kernel module 'squashfs' is disabled
+  lineinfile:
+    create: true
+    path: /etc/modprobe.d/squashfs.conf
+    regexp: '^.*squashfs.*$'
+    line: "install squashfs /bin/true"
+  tags:
+    - CCE-80142-3
+    - NIST-800-171-3.4.6
+    - NIST-800-53-CM-7
+
+- name: Ensure kernel module 'hfsplus' is disabled
+  lineinfile:
+    create: true
+    path: /etc/modprobe.d/hfsplus.conf
+    regexp: '^.*hfsplus.*'
+    line: "install hfsplus /bin/true"
+  tags:
+    - CCE-80141-5
+    - NIST-800-171-3.4.6
+    - NIST-800-53-CM-7
+
+- name: Ensure kernel module 'jffs2' is disabled
+  lineinfile:
+    create: true
+    path: /etc/modprobe.d/jffs2.conf
+    regexp: '^.*jffs2.*'
+    line: "install jffs2 /bin/true"
+  tags:
+    - CCE-80139-9
+    - NIST-800-171-3.4.6
+    - NIST-800-53-CM-7
+
+- name: Ensure kernel module 'hfs' is disabled
+  lineinfile:
+    create: true
+    path: /etc/modprobe.d/hfs.conf
+    regexp: '^.*hfs.*$'
+    line: "install hfs /bin/true"
+  tags:
+    - CCE-80140-7
+    - NIST-800-171-3.4.6
+    - NIST-800-53-CM-7
+
+- name: Ensure kernel module 'cramfs' is disabled
+  lineinfile:
+    create: true
+    path: /etc/modprobe.d/cramfs.conf
+    regexp: '^.*cramfs.*$'
+    line: "install cramfs /bin/true"
+  tags:
+    - CCE-80137-3
+    - NIST-800-171-3.4.6
+    - NIST-800-53-CM-7
+
+# End Restrict Dynamic Mounting and Unmounting of Filesystems
+# Start Restrict Programs from Dangerous Execution Patterns
+
+- name: Ensure sysctl fs.suid_dumpable is set to 0 (Disable Core Dumps for SUID programs)
+  sysctl:
+    name: fs.suid_dumpable
+    value: 0
+    state: present
+    reload: true
+  tags:
+    - CCE-26900-1
+    - NIST-800-53-SI-11
+
+- name: Ensure sysctl kernel.randomize_va_space is set to 2 (Enable Randomized Layout of Virtual Address Space)
+  sysctl:
+    name: kernel.randomize_va_space
+    value: 2
+    state: present
+    reload: true
+  tags:
+    - CCE-27127-0
+    - NIST-800-171-3.1.7
+    - NIST-800-53-SC-30(2)
+    - NIST-800-53-SC-39
+
+- name: Ensure sysctl kernel.dmesg_restrict is set to 1 (Restrict Access to Kernel Message Buffer)
+  sysctl:
+    name: kernel.dmesg_restrict
+    value: 1
+    state: present
+    reload: true
+  tags:
+    - CCE-27050-4
+    - NIST-800-171-3.1.5
+    - NIST-800-53-SI-11
