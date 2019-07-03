@@ -124,7 +124,7 @@
 - name: Ensure sysctl fs.suid_dumpable is set to 0 (Disable Core Dumps for SUID programs)
   sysctl:
     name: fs.suid_dumpable
-    value: 0
+    value: "0"
     state: present
     reload: true
   tags:
@@ -134,7 +134,7 @@
 - name: Ensure sysctl kernel.randomize_va_space is set to 2 (Enable Randomized Layout of Virtual Address Space)
   sysctl:
     name: kernel.randomize_va_space
-    value: 2
+    value: "2"
     state: present
     reload: true
   tags:
@@ -146,10 +146,136 @@
 - name: Ensure sysctl kernel.dmesg_restrict is set to 1 (Restrict Access to Kernel Message Buffer)
   sysctl:
     name: kernel.dmesg_restrict
-    value: 1
+    value: "1"
     state: present
     reload: true
   tags:
     - CCE-27050-4
     - NIST-800-171-3.1.5
     - NIST-800-53-SI-11
+
+# End Restrict Programs from Dangerous Execution Patterns
+# Start Restrict Partition Mount Options
+
+- name: Restrict Partition Mount Options
+  include_tasks: system_settings_restrict_partition_mount_options.yml
+  loop: "{{ file_permissions_and_masks_removable_partition_fstab_options }}"
+  loop_control:
+    loop_var: option_name
+
+# - name: Check for Removable Media Partition in /etc/fstab - {{ file_permissions_and_masks_removable_partition }}
+#   command: findmnt --fstab {{ file_permissions_and_masks_removable_partition|quote }}
+#   register: removable_device_info
+#   failed_when: removable_device_info.rc > 1
+#   changed_when: false
+#   tags:
+#     - CCE-80146-4
+#     - CCE-80148-0
+#     - CCE-80147-2
+#     - DISA-STIG-RHEL-07-021010
+#     - NIST-800-53-AC-19(a)
+#     - NIST-800-53-AC-19(d)
+#     - NIST-800-53-AC-19(e)
+#     - NIST-800-53-CM-7
+#     - NIST-800-53-MP-2
+#
+# - name: Set Mount Information Key and Value Lists
+#   set_fact:
+#     mount_info_keys: "{{ removable_device_info.stdout_lines[0].split() | list | lower }}"
+#     mount_info_values: "{{ removable_device_info.stdout_lines[1].split() | list }}"
+#   when:
+#     - removable_device_info.stdout_lines is defined
+#     - removable_device_info.stdout is defined
+#     - (removable_device_info.stdout | length > 0)
+#   tags:
+#     - CCE-80146-4
+#     - CCE-80148-0
+#     - CCE-80147-2
+#     - DISA-STIG-RHEL-07-021010
+#     - NIST-800-53-AC-6
+#     - NIST-800-53-AC-19(a)
+#     - NIST-800-53-AC-19(d)
+#     - NIST-800-53-AC-19(e)
+#     - NIST-800-53-CM-7
+#     - NIST-800-53-MP-2
+#
+# - name: Set Mount Information as Dictionary Variable
+#   set_fact:
+#     mount_info: "{{ mount_info|default({})|combine({item.0: item.1}) }}"
+#   loop: "{{ mount_info_keys | zip(mount_info_values) | list }}"
+#   when:
+#     - mount_info_keys is defined
+#     - mount_info_values is defined
+#   tags:
+#     - CCE-80146-4
+#     - CCE-80148-0
+#     - CCE-80147-2
+#     - DISA-STIG-RHEL-07-021010
+#     - NIST-800-53-AC-6
+#     - NIST-800-53-AC-19(a)
+#     - NIST-800-53-AC-19(d)
+#     - NIST-800-53-AC-19(e)
+#     - NIST-800-53-CM-7
+#     - NIST-800-53-MP-2
+#
+# - name: Ensure Correct Options are set in /etc/fstab for {{ file_permissions_and_masks_removable_partition }}
+#   mount:
+#     path: "{{ mount_info.target }}"
+#     src: "{{ mount_info.source }}"
+#     opts: "{{ mount_info.options }},{{ item }}"
+#     state: mounted
+#     fstype: "{{ mount_info.fstype }}"
+#   loop: "{{ file_permissions_and_masks_removable_partition_fstab_options }}"
+#   when:
+#     - mount_info_keys is defined
+#     - mount_info_values is defined
+#     - item not in mount_info.options
+#   tags:
+#     - CCE-80148-0
+#     - CCE-80146-4
+#     - CCE-80147-2
+#     - DISA-STIG-RHEL-07-021010
+#     - NIST-800-53-AC-6
+#     - NIST-800-53-AC-19(a)
+#     - NIST-800-53-AC-19(d)
+#     - NIST-800-53-AC-19(e)
+#     - NIST-800-53-CM-7
+#     - NIST-800-53-MP-2
+
+# - name: Ensure Permission nodev is set in /etc/fstab for {{ file_permissions_and_masks_removable_partition }}
+#   mount:
+#     path: "{{ mount_info.target }}"
+#     src: "{{ mount_info.source }}"
+#     opts: "{{ mount_info.options }},nodev"
+#     state: mounted
+#     fstype: "{{ mount_info.fstype }}"
+#   when:
+#     - mount_info_keys is defined
+#     - mount_info_values is defined
+#     - '"nodev" not in mount_info.options'
+#   tags:
+#     - CCE-80146-4
+#     - NIST-800-53-AC-19(a)
+#     - NIST-800-53-AC-19(d)
+#     - NIST-800-53-AC-19(e)
+#     - NIST-800-53-CM-7
+#     - NIST-800-53-MP-2
+#
+# - name: Ensure Permission noexec is set in /etc/fstab for {{ file_permissions_and_masks_removable_partition }}
+#   mount:
+#     path: "{{ mount_info.target }}"
+#     src: "{{ mount_info.source }}"
+#     opts: "{{ mount_info.options }},noexec"
+#     state: mounted
+#     fstype: "{{ mount_info.fstype }}"
+#   when:
+#     - mount_info_keys is defined
+#     - mount_info_values is defined
+#     - '"noexec" not in mount_info.options'
+#   tags:
+#     - CCE-80147-2
+#     - NIST-800-53-AC-19(a)
+#     - NIST-800-53-AC-19(d)
+#     - NIST-800-53-AC-19(e)
+#     - NIST-800-53-CM-7
+#     - NIST-800-53-MP-2

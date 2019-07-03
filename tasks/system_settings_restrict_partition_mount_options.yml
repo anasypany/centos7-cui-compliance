@@ -1,0 +1,80 @@
+---
+# Start Restrict Partition Mount Options
+
+- name: Check for Removable Media Partition in /etc/fstab - {{ file_permissions_and_masks_removable_partition }}
+  command: findmnt --fstab {{ file_permissions_and_masks_removable_partition|quote }}
+  register: removable_device_info
+  failed_when: removable_device_info.rc > 1
+  changed_when: false
+  tags:
+    - CCE-80146-4
+    - CCE-80148-0
+    - CCE-80147-2
+    - DISA-STIG-RHEL-07-021010
+    - NIST-800-53-AC-19(a)
+    - NIST-800-53-AC-19(d)
+    - NIST-800-53-AC-19(e)
+    - NIST-800-53-CM-7
+    - NIST-800-53-MP-2
+
+- name: Set Mount Information Key and Value Lists
+  set_fact:
+    mount_info_keys: "{{ removable_device_info.stdout_lines[0].split() | list | lower }}"
+    mount_info_values: "{{ removable_device_info.stdout_lines[1].split() | list }}"
+  when:
+    - removable_device_info.stdout_lines is defined
+    - removable_device_info.stdout is defined
+    - (removable_device_info.stdout | length > 0)
+  tags:
+    - CCE-80146-4
+    - CCE-80148-0
+    - CCE-80147-2
+    - DISA-STIG-RHEL-07-021010
+    - NIST-800-53-AC-6
+    - NIST-800-53-AC-19(a)
+    - NIST-800-53-AC-19(d)
+    - NIST-800-53-AC-19(e)
+    - NIST-800-53-CM-7
+    - NIST-800-53-MP-2
+
+- name: Set Mount Information as Dictionary Variable
+  set_fact:
+    mount_info: "{{ mount_info|default({})|combine({item.0: item.1}) }}"
+  loop: "{{ mount_info_keys | zip(mount_info_values) | list }}"
+  when:
+    - mount_info_keys is defined
+    - mount_info_values is defined
+  tags:
+    - CCE-80146-4
+    - CCE-80148-0
+    - CCE-80147-2
+    - DISA-STIG-RHEL-07-021010
+    - NIST-800-53-AC-6
+    - NIST-800-53-AC-19(a)
+    - NIST-800-53-AC-19(d)
+    - NIST-800-53-AC-19(e)
+    - NIST-800-53-CM-7
+    - NIST-800-53-MP-2
+
+- name: Ensure {{ option_name }} Option is Exists in /etc/fstab for {{ file_permissions_and_masks_removable_partition }}
+  mount:
+    path: "{{ mount_info.target }}"
+    src: "{{ mount_info.source }}"
+    opts: "{{ mount_info.options }},{{ option_name }}"
+    state: mounted
+    fstype: "{{ mount_info.fstype }}"
+  when:
+    - mount_info_keys is defined
+    - mount_info_values is defined
+    - option_name not in mount_info.options
+  tags:
+    - CCE-80148-0
+    - CCE-80146-4
+    - CCE-80147-2
+    - DISA-STIG-RHEL-07-021010
+    - NIST-800-53-AC-6
+    - NIST-800-53-AC-19(a)
+    - NIST-800-53-AC-19(d)
+    - NIST-800-53-AC-19(e)
+    - NIST-800-53-CM-7
+    - NIST-800-53-MP-2

@@ -314,3 +314,9 @@ audit_rules_privileged_command_paths:
   - '/usr/bin/newgrp'
 
 centos7_cui_compliance_system_settings_file_permissions_and_masks: true
+
+file_permissions_and_masks_removable_partition: '/dev/cdrom'
+file_permissions_and_masks_removable_partition_fstab_options:
+  - 'nosuid'
+  - 'nodev'
+  - 'noexec'
