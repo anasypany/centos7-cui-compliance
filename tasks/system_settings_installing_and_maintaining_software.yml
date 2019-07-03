@@ -158,7 +158,7 @@
     path: /etc/yum.conf
     section: main
     option: clean_requirements_on_remove
-    value: 1
+    value: "1"
     no_extra_spaces: yes
   tags:
     - CCE-80346-0
@@ -172,7 +172,7 @@
     dest: /etc/yum.conf
     section: main
     option: gpgcheck
-    value: 1
+    value: "1"
     no_extra_spaces: yes
   tags:
     - CCE-26989-4

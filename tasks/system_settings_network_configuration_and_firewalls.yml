@@ -6,7 +6,7 @@
     regexp: '(?i)^#?IPV6_AUTOCONF'
     line: "IPV6_AUTOCONF=no"
   loop: "{{ ansible_interfaces }}"
-  when: system_settings_network_configuration_and_firewalls_disable_ipv6_autoconf
+  when: system_settings_network_configuration_and_firewalls_disable_ipv6_autoconf|bool
 
 - name: Configure Networking Kernel Parameters - IPv4 & IPv6
   sysctl:
@@ -61,7 +61,7 @@
     regexp: '(?i)^#?IPV6_PRIVACY'
     line: "IPV6_PRIVACY=rfc3041"
   loop: "{{ ansible_interfaces }}"
-  when: system_settings_network_configuration_and_firewalls_ipv6_privacy
+  when: system_settings_network_configuration_and_firewalls_ipv6_privacy|bool
   tags:
     - CCE-80185-2
     - NIST-800-53-CM-7

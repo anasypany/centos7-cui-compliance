@@ -11,7 +11,7 @@
     state: "{{ item.state }}"
     persistent: "{{ item.persistent }}"
   loop: "{{ system_settings_selinux_boolean_list }}"
-  when: system_settings_selinux_boolean
+  when: system_settings_selinux_boolean|bool
   tags:
     - NIST-800-171-3.1.2
     - NIST-800-171-3.7.2
