@@ -260,7 +260,7 @@
     owner: root
     group: root
     mode: 0640
-  notify: Reload audit rules
+  notify: Reboot server
   tags:
     - CCE-27097-5
     - NIST-800-53-AC-6
