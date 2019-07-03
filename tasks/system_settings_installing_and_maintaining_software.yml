@@ -29,6 +29,7 @@
   when:
     - rpm_files_with_incorrect_permissions.stdout_lines is defined
     - (rpm_files_with_incorrect_permissions.stdout_lines | length > 0)
+    - "'/var/log/dmesg' not in rpm_files_with_incorrect_permissions.stdout_lines" # Workaround for bug found at https://bugzilla.redhat.com/show_bug.cgi?id=1584317
   tags:
     - CCE-27209-6
     - NIST-800-53-AC-6
@@ -143,7 +144,7 @@
     path: /etc/yum.conf
     section: main
     option: localpkg_gpgcheck
-    value: 1
+    value: "1"
     no_extra_spaces: yes
   tags:
     - CCE-80347-8
