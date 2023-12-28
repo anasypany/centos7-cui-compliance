@@ -1,7 +1,8 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+ansible role for centos7 (rip) that implemented all the controls outlined in https://complianceascode.github.io/content-pages/guides/ssg-rhel7-guide-cui.html as a single role
+started originally as a personal project to get more familiar in the world of compliance controls and ansible before being abandoned for a profesional project of similar nature.
 
 Requirements
 ------------
